@@ -4,11 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,8 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.school.model.Estudiante;
 import com.school.service.EstudianteService;
 
+@CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
-@RequestMapping("/estudiantes")
+@RequestMapping("/api/estudiantes")
 public class EstudianteController {
 
 	@Autowired
@@ -34,10 +40,20 @@ public class EstudianteController {
 	}
 	
 	@PostMapping("/crear")
-	public ResponseEntity<?> saveEstudiante(@RequestBody Estudiante estudiante){
+	public ResponseEntity<?> saveEstudiante(@Valid @RequestBody Estudiante estudiante, BindingResult results){
 		Estudiante estudianteNuevo = null;
 		Map<String, Object> response = new HashMap<>();
 		
+		if(results.hasErrors()) {
+			List<String> errors = results.getFieldErrors()
+					.stream()
+					.map(er -> "El campo '" + er.getField() +"' " + er.getDefaultMessage())
+					.collect(Collectors.toList());
+			
+			response.put("errors", errors);
+			
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+		}
 		
 		try {
 			estudianteNuevo = estudianteService.save(estudiante);
@@ -81,10 +97,21 @@ public class EstudianteController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateEstudiante(@RequestBody Estudiante estudiante, @PathVariable Long id){
+	public ResponseEntity<?> updateEstudiante(@Valid @RequestBody Estudiante estudiante ,BindingResult results , @PathVariable Long id){
 		Estudiante estudianteActual = estudianteService.getEstudianteById(id).get();
 		Estudiante estudianteActualizado = null;
 		Map<String, Object> response = new HashMap<>();
+		
+		if(results.hasErrors()) {
+			List<String> errors = results.getFieldErrors()
+					.stream()
+					.map(er -> "El campo '" + er.getField() +"' " + er.getDefaultMessage())
+					.collect(Collectors.toList());
+			
+			response.put("errors", errors);
+			
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+		}
 		
 		if(estudianteActual == null) {
 			response.put("mensaje", "Error: No se pudo editar, el estudiante con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
