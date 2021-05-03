@@ -13,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.school.model.Aula;
 import com.school.service.AulaService;
 
+@CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
 @RequestMapping("/api/aulas")
 public class AulaController {
@@ -112,7 +114,7 @@ public class AulaController {
 		}
 		
 		if(aulaActual == null) {
-			response.put("mensaje", "Error: No se pudo editar, el aula con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+			response.put("mensaje", "Error: No se pudo editar el aula con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
@@ -120,6 +122,8 @@ public class AulaController {
 			
 			aulaActual.setNombre(aula.getNombre());
 			aulaActual.setListaEstudiantes(aula.getListaEstudiantes());
+			aulaActual.setClases(aula.getClases());
+			aulaActual.setSeccion(aula.getSeccion());
 			
 			aulaActualizado = aulaService.save(aulaActual);
 		} catch (DataAccessException e) {
@@ -142,7 +146,7 @@ public class AulaController {
 		Map<String, Object> response = new HashMap<>();
 		
 		if(aula == null) {
-			response.put("mensaje", "Error: No se pudo eliminar, el aula con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+			response.put("mensaje", "Error: No se pudo eliminar el aula con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
