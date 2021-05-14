@@ -27,7 +27,7 @@ public class Clase implements Serializable{
 	private String nombre;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnoreProperties({"clases", "hibernateLazyInitializer", "handler"})
+	@JsonIgnoreProperties({"clasesAula", "hibernateLazyInitializer", "handler"})
 	private Aula aula;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

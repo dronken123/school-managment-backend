@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.school.model.Aula;
+import com.school.model.Grado;
 import com.school.service.AulaService;
+import com.school.service.GradoService;
 
 @CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
@@ -33,6 +35,9 @@ public class AulaController {
 
 	@Autowired
 	private AulaService aulaService;
+	
+	@Autowired
+	private GradoService gradoService;
 
 	@GetMapping
 	public ResponseEntity<List<Aula>> getAllAulas(){
@@ -122,8 +127,11 @@ public class AulaController {
 			
 			aulaActual.setNombre(aula.getNombre());
 			aulaActual.setListaEstudiantes(aula.getListaEstudiantes());
-			aulaActual.setClases(aula.getClases());
+			aulaActual.setClasesAula(aula.getClasesAula());
 			aulaActual.setSeccion(aula.getSeccion());
+			aulaActual.setTurno(aula.getTurno());
+			aulaActual.setNivel(aula.getNivel());
+			aulaActual.setGrado(aula.getGrado());
 			
 			aulaActualizado = aulaService.save(aulaActual);
 		} catch (DataAccessException e) {
@@ -165,9 +173,12 @@ public class AulaController {
 	}
 	
 	
+	/* SECCIÓN DE LOS MÉTODOS DE LA CLASE GRADO*/
 	
-	
-	
+	@GetMapping("/grados")
+	public ResponseEntity<List<Grado>> getAllGrados(){
+		return new ResponseEntity<List<Grado>>( gradoService.findAll(),HttpStatus.OK);
+	}
 	
 	
 	

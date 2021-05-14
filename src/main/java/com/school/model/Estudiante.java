@@ -11,11 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+
 
 @Entity
 @Table(name = "estudiantes")
@@ -41,8 +41,7 @@ public class Estudiante implements Serializable {
 
 	@NotNull(message = "no puede estar vacío.")
 	@Column(name = "fecha_nacimiento")
-	@Temporal(TemporalType.DATE)
-	private Date fechaNacimiento;
+	private String fechaNacimiento;
 
 	@NotEmpty(message = "no puede estar vacío.")
 	@Size(min = 8, max = 8, message = " tiene que tener 8 caracteres.")
@@ -53,7 +52,7 @@ public class Estudiante implements Serializable {
 	private String correo;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Aula aula;
+	private Aula aulaEstudiante;
 
 	public Estudiante() {
 		// TODO Auto-generated constructor stub
@@ -91,11 +90,11 @@ public class Estudiante implements Serializable {
 		this.apellidoMaterno = apellidoMaterno;
 	}
 
-	public Date getFechaNacimiento() {
+	public String getFechaNacimiento() {
 		return fechaNacimiento;
 	}
 
-	public void setFechaNacimiento(Date fechaNacimiento) {
+	public void setFechaNacimiento(String fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
@@ -122,6 +121,16 @@ public class Estudiante implements Serializable {
 	public void setCorreo(String correo) {
 		this.correo = correo;
 	}
+
+	public Aula getAulaEstudiante() {
+		return aulaEstudiante;
+	}
+
+	public void setAulaEstudiante(Aula aula) {
+		this.aulaEstudiante = aula;
+	}
+
+
 
 	private static final long serialVersionUID = 1L;
 }
