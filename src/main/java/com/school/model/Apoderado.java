@@ -4,30 +4,27 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "estudiantes")
-public class Estudiante implements Serializable {
+@Table(name = "apoderados")
+public class Apoderado implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	
 	@NotEmpty(message = "no puede estar vacío.")
 	@Size(min = 2, max = 40, message = "tiene que ser entre 2 y 40 caracteres.")
 	private String nombres;
@@ -36,43 +33,23 @@ public class Estudiante implements Serializable {
 	@NotEmpty(message = "no puede estar vacío.")
 	@Size(min = 2, max = 20, message = "tiene que ser entre 2 y 15 caracteres.")
 	private String apellidoPaterno;
-
+	
 	@Column(name = "apellido_materno")
 	@NotEmpty(message = "no puede estar vacío")
 	@Size(min = 2, max = 20, message = "tiene que ser entre 2 y 15 caracteres.")
 	private String apellidoMaterno;
-
-	@NotNull(message = "no puede estar vacío.")
-	@Column(name = "fecha_nacimiento")
-	private String fechaNacimiento;
-
-	@NotEmpty(message = "no puede estar vacío.")
-	@Size(min = 8, max = 8, message = " tiene que tener 8 caracteres.")
-	private String dni;
-
+	
 	@NotEmpty(message = "no puede estar vacío")
-	private String domicilio;
+	private String dni;
 	
 	@NotEmpty(message = "no puede estar vacío")
 	private String celular;
-	
-	private String sexo;
-	
-	private String correo;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Aula aulaEstudiante;
+	@OneToMany(mappedBy = "apoderado", fetch = FetchType.LAZY)
+	@JsonIgnoreProperties({ "apoderado", "hibernateLazyInitializer", "handler" })
+	private List<Estudiante> listaEstudianteM = new ArrayList<>();
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@NotNull
-	@JsonIgnoreProperties({ "listaEstudianteM", "hibernateLazyInitializer", "handler" })
-	private Apoderado apoderado;
-
-	@OneToMany(mappedBy = "estudiante", fetch = FetchType.LAZY)
-	@JsonIgnoreProperties({ "estudiante", "hibernateLazyInitializer", "handler" })
-	private List<Matricula> listaMatriculas = new ArrayList<>();
-
-	public Estudiante() {
+	public Apoderado() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -108,52 +85,12 @@ public class Estudiante implements Serializable {
 		this.apellidoMaterno = apellidoMaterno;
 	}
 
-	public String getFechaNacimiento() {
-		return fechaNacimiento;
-	}
-
-	public void setFechaNacimiento(String fechaNacimiento) {
-		this.fechaNacimiento = fechaNacimiento;
-	}
-
 	public String getDni() {
 		return dni;
 	}
 
 	public void setDni(String dni) {
 		this.dni = dni;
-	}
-
-	public String getSexo() {
-		return sexo;
-	}
-
-	public void setSexo(String sexo) {
-		this.sexo = sexo;
-	}
-
-	public String getCorreo() {
-		return correo;
-	}
-
-	public void setCorreo(String correo) {
-		this.correo = correo;
-	}
-
-	public Aula getAulaEstudiante() {
-		return aulaEstudiante;
-	}
-
-	public void setAulaEstudiante(Aula aula) {
-		this.aulaEstudiante = aula;
-	}
-
-	public String getDomicilio() {
-		return domicilio;
-	}
-
-	public void setDomicilio(String domicilio) {
-		this.domicilio = domicilio;
 	}
 
 	public String getCelular() {
@@ -164,20 +101,12 @@ public class Estudiante implements Serializable {
 		this.celular = celular;
 	}
 
-	public Apoderado getApoderado() {
-		return apoderado;
+	public List<Estudiante> getListaEstudianteM() {
+		return listaEstudianteM;
 	}
 
-	public void setApoderado(Apoderado apoderado) {
-		this.apoderado = apoderado;
-	}
-
-	public List<Matricula> getListaMatriculas() {
-		return listaMatriculas;
-	}
-
-	public void setListaMatriculas(List<Matricula> listaMatriculas) {
-		this.listaMatriculas = listaMatriculas;
+	public void setListaEstudianteM(List<Estudiante> listaEstudianteM) {
+		this.listaEstudianteM = listaEstudianteM;
 	}
 
 	private static final long serialVersionUID = 1L;

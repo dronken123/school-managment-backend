@@ -50,7 +50,7 @@ public class Aula implements Serializable {
 
 	@OneToMany(mappedBy = "aulaEstudiante", fetch = FetchType.LAZY)
 	@JsonIgnoreProperties({ "aulaEstudiante", "hibernateLazyInitializer", "handler" })
-	private List<Estudiante> listaEstudiantes;
+	private List<Estudiante> listaEstudiantes = new ArrayList<>();
 
 	@OneToMany(mappedBy = "aula", fetch = FetchType.LAZY)
 	@JsonIgnoreProperties({ "aula", "hibernateLazyInitializer", "handler" })
