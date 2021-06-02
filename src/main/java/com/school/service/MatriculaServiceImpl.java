@@ -23,10 +23,12 @@ public class MatriculaServiceImpl implements MatriculaService{
 	public Matricula save(Matricula matricula) {
 		
 		Estudiante estudiante = matricula.getEstudiante();
+		String[] nombres = estudiante.getNombres().split(" ");
+		estudiante.setCorreo(nombres[0] + "." + estudiante.getApellidoPaterno());
+		estudiante.setCorreo(estudiante.getCorreo().concat("@elamericano.edu.pe").toLowerCase());
+		
 		Apoderado apoderado = estudiante.getApoderado();
-		estudiante.getListaMatriculas().add(matricula);
 		estudiante.setApoderado(apoderado);
-		apoderado.getListaEstudianteM().add(estudiante);
 		matricula.setEstudiante(estudiante);
 		
 		return matriculaDao.save(matricula);

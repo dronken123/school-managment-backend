@@ -60,16 +60,15 @@ public class Estudiante implements Serializable {
 	
 	private String correo;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
+	@JsonIgnoreProperties({"listaEstudiantes","hibernateLazyInitializer", "handler"})
 	private Aula aulaEstudiante;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@NotNull
-	@JsonIgnoreProperties({ "listaEstudianteM", "hibernateLazyInitializer", "handler" })
 	private Apoderado apoderado;
 
 	@OneToMany(mappedBy = "estudiante", fetch = FetchType.LAZY)
-	@JsonIgnoreProperties({ "estudiante", "hibernateLazyInitializer", "handler" })
 	private List<Matricula> listaMatriculas = new ArrayList<>();
 
 	public Estudiante() {

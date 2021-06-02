@@ -1,21 +1,16 @@
 package com.school.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "apoderados")
@@ -45,9 +40,6 @@ public class Apoderado implements Serializable {
 	@NotEmpty(message = "no puede estar vacío")
 	private String celular;
 
-	@OneToMany(mappedBy = "apoderado", fetch = FetchType.LAZY)
-	@JsonIgnoreProperties({ "apoderado", "hibernateLazyInitializer", "handler" })
-	private List<Estudiante> listaEstudianteM = new ArrayList<>();
 
 	public Apoderado() {
 		// TODO Auto-generated constructor stub
@@ -99,14 +91,6 @@ public class Apoderado implements Serializable {
 
 	public void setCelular(String celular) {
 		this.celular = celular;
-	}
-
-	public List<Estudiante> getListaEstudianteM() {
-		return listaEstudianteM;
-	}
-
-	public void setListaEstudianteM(List<Estudiante> listaEstudianteM) {
-		this.listaEstudianteM = listaEstudianteM;
 	}
 
 	private static final long serialVersionUID = 1L;

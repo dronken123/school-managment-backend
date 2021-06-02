@@ -125,7 +125,7 @@ public class ClaseController {
 			claseActual.setNombre(clase.getNombre());
 			claseActual.setAula(clase.getAula());
 			
-			claseActualizada = claseService.save(claseActual);
+			claseActualizada = claseService.update(claseActual);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al insertar la clase en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));

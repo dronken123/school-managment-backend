@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.school.dao.AulaDao;
 import com.school.dao.ClaseDao;
 import com.school.model.Clase;
 
@@ -16,9 +17,22 @@ public class ClaseServiceImpl implements ClaseService{
 	@Autowired
 	private ClaseDao claseDao;
 	
+	@Autowired
+	private AulaDao aulaDao;
+
+	
 	@Override
 	@Transactional
 	public Clase save(Clase clase) {
+		// TODO Auto-generated method stub
+		clase.setAula(aulaDao.findById(clase.getAula().getId()).get());
+		return claseDao.save(clase);
+	}
+	
+
+	@Override
+	@Transactional
+	public Clase update(Clase clase) {
 		// TODO Auto-generated method stub
 		return claseDao.save(clase);
 	}
@@ -46,5 +60,6 @@ public class ClaseServiceImpl implements ClaseService{
 			return true;
 		}).orElse(false);
 	}
+
 
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "aulas")
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Aula implements Serializable {
 
 	@Id
@@ -44,15 +44,15 @@ public class Aula implements Serializable {
 
 	@NotNull(message = "no puede estar vacío")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnoreProperties({ "grado", "hibernateLazyInitializer", "handler" })
+//	@JsonIgnoreProperties({ "grado", "hibernateLazyInitializer", "handler" })
 	@JoinColumn(name = "grado_id")
 	private Grado grado;
 
-	@OneToMany(mappedBy = "aulaEstudiante", fetch = FetchType.LAZY)
-	@JsonIgnoreProperties({ "aulaEstudiante", "hibernateLazyInitializer", "handler" })
+	@OneToMany(mappedBy = "aulaEstudiante", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+//	@JsonIgnoreProperties({ "aulaEstudiante", "hibernateLazyInitializer", "handler" })
 	private List<Estudiante> listaEstudiantes = new ArrayList<>();
 
-	@OneToMany(mappedBy = "aula", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "aula", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
 	@JsonIgnoreProperties({ "aula", "hibernateLazyInitializer", "handler" })
 	private List<Clase> clasesAula = new ArrayList<>();
 

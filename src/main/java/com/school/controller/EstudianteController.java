@@ -127,6 +127,8 @@ public class EstudianteController {
 			estudianteActual.setCorreo(estudiante.getCorreo());
 			estudianteActual.setSexo(estudiante.getSexo());
 			estudianteActual.setAulaEstudiante(estudiante.getAulaEstudiante());
+			estudianteActual.setDomicilio(estudiante.getDomicilio());
+			estudianteActual.setApoderado(estudiante.getApoderado());
 			
 			estudianteActualizado = estudianteService.save(estudianteActual);
 		} catch (DataAccessException e) {

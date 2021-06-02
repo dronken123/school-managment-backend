@@ -126,8 +126,6 @@ public class AulaController {
 		try {
 			
 			aulaActual.setNombre(aula.getNombre());
-			aulaActual.setListaEstudiantes(aula.getListaEstudiantes());
-			aulaActual.setClasesAula(aula.getClasesAula());
 			aulaActual.setSeccion(aula.getSeccion());
 			aulaActual.setTurno(aula.getTurno());
 			aulaActual.setNivel(aula.getNivel());

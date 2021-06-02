@@ -9,6 +9,8 @@ public interface ClaseService {
 
 	public Clase save(Clase clase);
 	
+	public Clase update(Clase clase);
+	
 	public Optional<Clase> getClaseById(Long id);
 
 	public List<Clase> findAll();

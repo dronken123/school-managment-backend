@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "cursos")
@@ -29,7 +28,6 @@ public class Curso implements Serializable {
 	private String nombre;
 	
 	@OneToMany(mappedBy = "curso", fetch = FetchType.LAZY)
-	@JsonIgnoreProperties({"curso", "hibernateLazyInitializer", "handler"})
 	private List<Clase> clases = new ArrayList<>();
 
 	public Long getId() {

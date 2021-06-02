@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,9 +32,9 @@ public class Matricula implements Serializable {
 
 	private String detalle;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@NotNull(message = "no puede estar vacío")
-	@JsonIgnoreProperties({ "listaMatriculas", "hibernateLazyInitializer", "handler" })
+	@JsonIgnoreProperties({"listaMatriculas","hibernateLazyInitializer", "handler"})
 	private Estudiante estudiante;
 
 	public Matricula() {
