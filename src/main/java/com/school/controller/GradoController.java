@@ -23,50 +23,50 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.school.model.Aula;
-import com.school.service.AulaService;
+import com.school.model.Grado;
+import com.school.service.GradoService;
 
 @CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
-@RequestMapping("/api/aulas")
-public class AulaController {
+@RequestMapping("/api/grados")
+public class GradoController {
 
 	@Autowired
-	private AulaService aulaService;
-
+	private GradoService gradoService;
+	
 	@GetMapping
-	public ResponseEntity<List<Aula>> getAllAulas(){
-		return new ResponseEntity<List<Aula>>(aulaService.findAll(), HttpStatus.OK);
+	public ResponseEntity<List<Grado>> getAllGrados(){
+		return new ResponseEntity<List<Grado>>(gradoService.findAll(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getAula(@PathVariable Long id){
+	public ResponseEntity<?> getGrado(@PathVariable Long id){
 		
-		Optional<Aula> aula = null;
+		Optional<Grado> grado = null;
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
-			aula = aulaService.getAulaById(id);
+			grado = gradoService.getGradoById(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al consultar el aula en la base de datos");
+			response.put("mensaje", "Error al consultar el grado en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		if(aula.isEmpty()) {
-			response.put("mensaje", "El aula con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+		if(grado.isEmpty()) {
+			response.put("mensaje", "El grado con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
 			
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<Aula>(aula.get() ,HttpStatus.OK);
+		return new ResponseEntity<Grado>(grado.get() ,HttpStatus.OK);
 	}
 	
 	@PostMapping("/crear")
-	public ResponseEntity<?> saveAula(@Valid @RequestBody Aula aula, BindingResult results){
+	public ResponseEntity<?> saveGrado(@Valid @RequestBody Grado grado, BindingResult results){
 		
-		Aula aulaNuevo = null;
+		Grado gradoNuevo = null;
 		Map<String, Object> response = new HashMap<>();
 		
 		if(results.hasErrors()) {
@@ -81,25 +81,25 @@ public class AulaController {
 		}
 		
 		try {
-			aulaNuevo = aulaService.save(aula);
+			gradoNuevo = gradoService.save(grado);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al insertar el aula en la base de datos");
+			response.put("mensaje", "Error al insertar el grado en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("aula", aulaNuevo);
-		response.put("mensaje", "La aula ha sido creada con éxito");
+		response.put("grado", gradoNuevo);
+		response.put("mensaje", "La grado ha sido creado con éxito");
 		
 		return new ResponseEntity<Map<String, Object>>(response ,HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateAula(@Valid @RequestBody Aula aula, BindingResult results, @PathVariable Long id){
+	public ResponseEntity<?> updateGrado(@Valid @RequestBody Grado grado, BindingResult results, @PathVariable Long id){
 		
-		Aula aulaActual = aulaService.getAulaById(id).orElse(null);
-		Aula aulaActualizado = null;
+		Grado gradoActual = gradoService.getGradoById(id).orElse(null);
+		Grado gradoActualizado = null;
 		Map<String, Object> response = new HashMap<>();
 		
 		if(results.hasErrors()) {
@@ -113,57 +113,53 @@ public class AulaController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		
-		if(aulaActual == null) {
-			response.put("mensaje", "Error: No se pudo editar el aula con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+		if(gradoActual == null) {
+			response.put("mensaje", "Error: No se pudo editar, el grado con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
 		try {
 			
-			aulaActual.setNombre(aula.getNombre());
-			aulaActual.setSeccion(aula.getSeccion());
-			aulaActual.setTurno(aula.getTurno());
-			aulaActual.setNivel(aula.getNivel());
-			aulaActual.setGradoAula(aula.getGradoAula());
-			aulaActual.setCapacidad(aula.getCapacidad());
+			gradoActual.setNombre(grado.getNombre());
 			
-			aulaActualizado = aulaService.save(aulaActual);
+			
+			gradoActualizado = gradoService.save(gradoActual);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al actualizar el aula en la base de datos");
+			response.put("mensaje", "Error al actualizar el grado en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("aula", aulaActualizado);
-		response.put("mensaje", "La aula ha sido actualizada con éxito");
+		response.put("grado", gradoActualizado);
+		response.put("mensaje", "La grado ha sido actualizado con éxito");
 		
 		return new ResponseEntity<Map<String, Object>>(response ,HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteAula(@PathVariable Long id){
+	public ResponseEntity<?> deleteGrado(@PathVariable Long id){
 	
-		Aula aula = aulaService.getAulaById(id).orElse(null);
+		Grado grado = gradoService.getGradoById(id).orElse(null);
 		Map<String, Object> response = new HashMap<>();
 		
-		if(aula == null) {
-			response.put("mensaje", "Error: No se pudo eliminar el aula con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+		if(grado == null) {
+			response.put("mensaje", "Error: No se pudo eliminar el grado con el ID: ".concat(id.toString().concat(" no existe en la base de datos")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
 		try {
-			aulaService.delete(id);
+			gradoService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al eliminar el aula en la base de datos");
+			response.put("mensaje", "Error al eliminar el grado en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "El aula ha sido eliminado con éxito");
+		response.put("mensaje", "El grado ha sido eliminado con éxito");
 		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
-	}	
+	}
 	
 }

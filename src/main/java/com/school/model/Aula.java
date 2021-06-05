@@ -43,16 +43,20 @@ public class Aula implements Serializable {
 	private String turno;
 
 	@NotNull(message = "no puede estar vacío")
+	private Integer capacidad;
+
+	@NotNull(message = "no puede estar vacío")
 	@ManyToOne(fetch = FetchType.LAZY)
-//	@JsonIgnoreProperties({ "grado", "hibernateLazyInitializer", "handler" })
+	@JsonIgnoreProperties({ "aulas", "hibernateLazyInitializer", "handler" })
 	@JoinColumn(name = "grado_id")
-	private Grado grado;
+	private Grado gradoAula;
 
 	@OneToMany(mappedBy = "aulaEstudiante", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 //	@JsonIgnoreProperties({ "aulaEstudiante", "hibernateLazyInitializer", "handler" })
 	private List<Estudiante> listaEstudiantes = new ArrayList<>();
 
-	@OneToMany(mappedBy = "aula", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+	@OneToMany(mappedBy = "aula", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REMOVE })
 	@JsonIgnoreProperties({ "aula", "hibernateLazyInitializer", "handler" })
 	private List<Clase> clasesAula = new ArrayList<>();
 
@@ -108,12 +112,12 @@ public class Aula implements Serializable {
 		this.nivel = nivel;
 	}
 
-	public Grado getGrado() {
-		return grado;
+	public Grado getGradoAula() {
+		return gradoAula;
 	}
 
-	public void setGrado(Grado grado) {
-		this.grado = grado;
+	public void setGradoAula(Grado gradoAula) {
+		this.gradoAula = gradoAula;
 	}
 
 	public String getTurno() {
@@ -122,6 +126,14 @@ public class Aula implements Serializable {
 
 	public void setTurno(String turno) {
 		this.turno = turno;
+	}
+
+	public Integer getCapacidad() {
+		return capacidad;
+	}
+
+	public void setCapacidad(Integer capacidad) {
+		this.capacidad = capacidad;
 	}
 
 	/**

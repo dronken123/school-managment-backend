@@ -4,13 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -26,8 +20,8 @@ public class Curso implements Serializable {
 	@NotEmpty(message = "no puede estar vacío.")
 	@Size(min = 2, max = 20, message = "tiene que ser entre 2 y 20 caracteres.")
 	private String nombre;
-	
-	@OneToMany(mappedBy = "curso", fetch = FetchType.LAZY)
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "curso")
 	private List<Clase> clases = new ArrayList<>();
 
 	public Long getId() {
@@ -45,7 +39,7 @@ public class Curso implements Serializable {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	
+
 	public List<Clase> getClases() {
 		return clases;
 	}
@@ -53,8 +47,6 @@ public class Curso implements Serializable {
 	public void setClases(List<Clase> clases) {
 		this.clases = clases;
 	}
-
-
 
 	/**
 	 * 

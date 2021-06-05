@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -52,24 +53,31 @@ public class Estudiante implements Serializable {
 
 	@NotEmpty(message = "no puede estar vacío")
 	private String domicilio;
-	
+
 	@NotEmpty(message = "no puede estar vacío")
 	private String celular;
-	
+
+	@NotEmpty(message = "no puede estar vacío")
 	private String sexo;
-	
+
 	private String correo;
 
 	@ManyToOne
-	@JsonIgnoreProperties({"listaEstudiantes","hibernateLazyInitializer", "handler"})
+	@JoinColumn(nullable = true)
+	@JsonIgnoreProperties({ "listaEstudiantes", "hibernateLazyInitializer", "handler" })
 	private Aula aulaEstudiante;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@NotNull
+	@JoinColumn(name = "apoderado_id", nullable = false)
+	@NotNull(message = "no puede estar vacío")
 	private Apoderado apoderado;
 
 	@OneToMany(mappedBy = "estudiante", fetch = FetchType.LAZY)
 	private List<Matricula> listaMatriculas = new ArrayList<>();
+
+	@ManyToOne
+	@JoinColumn(name = "grado_id", nullable = false)
+	private Grado grado;
 
 	public Estudiante() {
 		// TODO Auto-generated constructor stub
@@ -177,6 +185,14 @@ public class Estudiante implements Serializable {
 
 	public void setListaMatriculas(List<Matricula> listaMatriculas) {
 		this.listaMatriculas = listaMatriculas;
+	}
+
+	public Grado getGrado() {
+		return grado;
+	}
+
+	public void setGrado(Grado grado) {
+		this.grado = grado;
 	}
 
 	private static final long serialVersionUID = 1L;

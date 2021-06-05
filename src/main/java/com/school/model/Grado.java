@@ -1,12 +1,10 @@
 package com.school.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -22,6 +20,10 @@ public class Grado implements Serializable {
 	@Size(min = 2, max = 20, message = "tiene que ser entre 2 y 20 caracteres.")
 	private String nombre;
 
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "gradoAula")
+	private List<Aula> aulas = new ArrayList<>();
+
 	public Long getId() {
 		return id;
 	}
@@ -36,6 +38,14 @@ public class Grado implements Serializable {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public List<Aula> getAulas() {
+		return aulas;
+	}
+
+	public void setAulas(List<Aula> aulas) {
+		this.aulas = aulas;
 	}
 
 	private static final long serialVersionUID = 1L;

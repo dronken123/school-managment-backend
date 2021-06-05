@@ -7,6 +7,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
@@ -31,6 +32,7 @@ public class Clase implements Serializable{
 	private Aula aula;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_curso", nullable = false)
 	@JsonIgnoreProperties({"clases", "hibernateLazyInitializer", "handler"})
 	private Curso curso;
 	
