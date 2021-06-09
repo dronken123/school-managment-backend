@@ -2,13 +2,7 @@ package com.school.model;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -35,6 +29,7 @@ public class Matricula implements Serializable {
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@NotNull(message = "no puede estar vacío")
 	@JsonIgnoreProperties({"listaMatriculas","hibernateLazyInitializer", "handler"})
+	@JoinColumn(name = "estudiante_id", nullable = false)
 	private Estudiante estudiante;
 
 	public Matricula() {

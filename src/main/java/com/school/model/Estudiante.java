@@ -54,6 +54,7 @@ public class Estudiante implements Serializable {
 	@NotEmpty(message = "no puede estar vacío")
 	private String domicilio;
 
+	@Size(min = 9, max = 9, message = " tiene que tener 8 caracteres.")
 	@NotEmpty(message = "no puede estar vacío")
 	private String celular;
 
@@ -72,10 +73,11 @@ public class Estudiante implements Serializable {
 	@NotNull(message = "no puede estar vacío")
 	private Apoderado apoderado;
 
-	@OneToMany(mappedBy = "estudiante", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "estudiante", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<Matricula> listaMatriculas = new ArrayList<>();
 
 	@ManyToOne
+	@NotNull(message = "no puede estar vacío")
 	@JoinColumn(name = "grado_id", nullable = false)
 	private Grado grado;
 

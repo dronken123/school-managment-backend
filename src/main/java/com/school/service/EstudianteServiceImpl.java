@@ -25,6 +25,11 @@ public class EstudianteServiceImpl implements EstudianteService{
 	}
 
 	@Override
+	public Estudiante findByDni(String dni) {
+		return estudianteDao.findByDni(dni);
+	}
+
+	@Override
 	@Transactional(readOnly = true)
 	public Optional<Estudiante> getEstudianteById(Long id) {
 		return estudianteDao.findById(id);

@@ -21,8 +21,7 @@ public class Grado implements Serializable {
 	private String nombre;
 
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "gradoAula")
-	private List<Aula> aulas = new ArrayList<>();
+
 
 	public Long getId() {
 		return id;
@@ -40,13 +39,7 @@ public class Grado implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public List<Aula> getAulas() {
-		return aulas;
-	}
 
-	public void setAulas(List<Aula> aulas) {
-		this.aulas = aulas;
-	}
 
 	private static final long serialVersionUID = 1L;
 

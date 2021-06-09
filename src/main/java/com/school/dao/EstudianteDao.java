@@ -6,4 +6,5 @@ import com.school.model.Estudiante;
 
 public interface EstudianteDao extends JpaRepository<Estudiante, Long>{
 
+    public Estudiante findByDni(String dni);
 }

@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.school.model.Apoderado;
+import com.school.model.Estudiante;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -47,6 +49,13 @@ public class MatriculaController {
 		}
 		
 		try {
+			Estudiante estudiante = matricula.getEstudiante();
+			String[] nombres = estudiante.getNombres().split(" ");
+			estudiante.setCorreo(nombres[0] + "." + estudiante.getApellidoPaterno());
+			estudiante.setCorreo(estudiante.getCorreo().concat("@elamericano.edu.pe").toLowerCase());
+			Apoderado apoderado = estudiante.getApoderado();
+			estudiante.setApoderado(apoderado);
+			matricula.setEstudiante(estudiante);
 			matriculaNueva = matriculaService.save(matricula);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al insertar el aula en la base de datos");

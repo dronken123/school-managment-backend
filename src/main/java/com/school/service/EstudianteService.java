@@ -12,6 +12,8 @@ import com.school.model.Estudiante;
 public interface EstudianteService {
 
 	public Estudiante save(Estudiante estudiante);
+
+	public Estudiante findByDni(String dni);
 	
 	public Optional<Estudiante> getEstudianteById(Long id);
 

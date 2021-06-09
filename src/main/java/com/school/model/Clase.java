@@ -35,6 +35,11 @@ public class Clase implements Serializable{
 	@JoinColumn(name = "id_curso", nullable = false)
 	@JsonIgnoreProperties({"clases", "hibernateLazyInitializer", "handler"})
 	private Curso curso;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = " empleado_id", nullable = true)
+	@JsonIgnoreProperties({"listaClases", "hibernateLazyInitializer", "handler"})
+	private Empleado empleado;
 	
 	public Clase() {
 		// TODO Auto-generated constructor stub
@@ -72,8 +77,13 @@ public class Clase implements Serializable{
 		this.curso = curso;
 	}
 
+	public Empleado getEmpleado() {
+		return empleado;
+	}
 
-
+	public void setEmpleado(Empleado empleado) {
+		this.empleado = empleado;
+	}
 
 	/**
 	 * 
