@@ -1,6 +1,7 @@
 package com.school.service;
 
 import com.school.dao.EmpleadoDao;
+import com.school.model.Clase;
 import com.school.model.Empleado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,5 +44,10 @@ public class EmpleadoServiceImpl implements EmpleadoService{
             empleadoDao.deleteById(id);
             return true;
         }).orElse(false);
+    }
+
+    @Override
+    public List<Clase> findClasesProfesor(Long id) {
+        return empleadoDao.findClasesProfesor(id);
     }
 }

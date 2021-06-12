@@ -1,5 +1,7 @@
 package com.school.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -50,8 +52,9 @@ public class Empleado implements Serializable {
 
     private String correo;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "empleado")
-    private List<Clase> listaClases = new ArrayList<>();
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "empleado")
+//    @JsonIgnoreProperties({"empleado" ,"hibernateLazyInitializer", "handler"})
+//    private List<Clase> listaClases = new ArrayList<>();
 
     public Empleado() {
     }
@@ -136,13 +139,13 @@ public class Empleado implements Serializable {
         this.correo = correo;
     }
 
-    public List<Clase> getListaClases() {
-        return listaClases;
-    }
-
-    public void setListaClases(List<Clase> listaClases) {
-        this.listaClases = listaClases;
-    }
+//    public List<Clase> getListaClases() {
+//        return listaClases;
+//    }
+//
+//    public void setListaClases(List<Clase> listaClases) {
+//        this.listaClases = listaClases;
+//    }
 
     /**
      *

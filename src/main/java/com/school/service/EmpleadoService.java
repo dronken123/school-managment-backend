@@ -1,5 +1,6 @@
 package com.school.service;
 
+import com.school.model.Clase;
 import com.school.model.Empleado;
 import com.school.model.Estudiante;
 import org.springframework.data.domain.Page;
@@ -20,4 +21,6 @@ public interface EmpleadoService {
     public Page<Empleado> findAll(Pageable pageable);
 
     public boolean delete(Long id);
+
+    public List<Clase> findClasesProfesor(Long id);
 }

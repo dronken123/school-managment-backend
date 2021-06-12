@@ -1,5 +1,7 @@
 package com.school.controller;
 
+import com.school.dao.EmpleadoDao;
+import com.school.model.Clase;
 import com.school.model.Empleado;
 import com.school.service.EmpleadoService;
 import org.springframework.beans.factory.annotation.Autowired;

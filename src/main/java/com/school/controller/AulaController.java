@@ -8,20 +8,15 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.school.model.Clase;
+import com.school.model.Estudiante;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.school.model.Aula;
 import com.school.service.AulaService;
@@ -37,6 +32,16 @@ public class AulaController {
 	@GetMapping
 	public ResponseEntity<List<Aula>> getAllAulas(){
 		return new ResponseEntity<List<Aula>>(aulaService.findAll(), HttpStatus.OK);
+	}
+
+	@GetMapping("/estudiantes")
+	public ResponseEntity<List<Estudiante>> getAllEstudiantesAula(@RequestParam("id") String id){
+		return new ResponseEntity<List<Estudiante>>(aulaService.findEstudiantesAula(Long.parseLong(id)), HttpStatus.OK);
+	}
+
+	@GetMapping("/clases")
+	public ResponseEntity<List<Clase>> getAllClasesAula(@RequestParam("id") String id){
+		return new ResponseEntity<List<Clase>>(aulaService.findClasesAula(Long.parseLong(id)), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")

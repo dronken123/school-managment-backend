@@ -63,9 +63,8 @@ public class Estudiante implements Serializable {
 
 	private String correo;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = true)
-	@JsonIgnoreProperties({ "listaEstudiantes", "hibernateLazyInitializer", "handler" })
 	private Aula aulaEstudiante;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -73,10 +72,7 @@ public class Estudiante implements Serializable {
 	@NotNull(message = "no puede estar vacío")
 	private Apoderado apoderado;
 
-	@OneToMany(mappedBy = "estudiante", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	private List<Matricula> listaMatriculas = new ArrayList<>();
-
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@NotNull(message = "no puede estar vacío")
 	@JoinColumn(name = "grado_id", nullable = false)
 	private Grado grado;
@@ -179,14 +175,6 @@ public class Estudiante implements Serializable {
 
 	public void setApoderado(Apoderado apoderado) {
 		this.apoderado = apoderado;
-	}
-
-	public List<Matricula> getListaMatriculas() {
-		return listaMatriculas;
-	}
-
-	public void setListaMatriculas(List<Matricula> listaMatriculas) {
-		this.listaMatriculas = listaMatriculas;
 	}
 
 	public Grado getGrado() {

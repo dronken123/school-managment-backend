@@ -28,7 +28,6 @@ public class Matricula implements Serializable {
 
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@NotNull(message = "no puede estar vacío")
-	@JsonIgnoreProperties({"listaMatriculas","hibernateLazyInitializer", "handler"})
 	@JoinColumn(name = "estudiante_id", nullable = false)
 	private Estudiante estudiante;
 

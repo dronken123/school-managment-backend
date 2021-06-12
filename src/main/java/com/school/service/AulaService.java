@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.school.model.Aula;
+import com.school.model.Clase;
+import com.school.model.Estudiante;
 
 public interface AulaService {
 
@@ -14,4 +16,8 @@ public interface AulaService {
 	public List<Aula> findAll();
 	
 	public boolean delete(Long id);
+
+	public List<Estudiante> findEstudiantesAula(Long id);
+	public List<Clase> findClasesAula(Long id);
+
 }

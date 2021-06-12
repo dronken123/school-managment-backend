@@ -51,15 +51,6 @@ public class Aula implements Serializable {
 	@JoinColumn(name = "grado_id")
 	private Grado gradoAula;
 
-	@OneToMany(mappedBy = "aulaEstudiante", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-//	@JsonIgnoreProperties({ "aulaEstudiante", "hibernateLazyInitializer", "handler" })
-	private List<Estudiante> listaEstudiantes = new ArrayList<>();
-
-	@OneToMany(mappedBy = "aula", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REMOVE })
-	@JsonIgnoreProperties({ "aula", "hibernateLazyInitializer", "handler" })
-	private List<Clase> clasesAula = new ArrayList<>();
-
 	public Aula() {
 		// TODO Auto-generated constructor stub
 	}
@@ -80,28 +71,12 @@ public class Aula implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public List<Estudiante> getListaEstudiantes() {
-		return listaEstudiantes;
-	}
-
-	public void setListaEstudiantes(List<Estudiante> listaEstudiantes) {
-		this.listaEstudiantes = listaEstudiantes;
-	}
-
 	public String getSeccion() {
 		return seccion;
 	}
 
 	public void setSeccion(String seccion) {
 		this.seccion = seccion;
-	}
-
-	public List<Clase> getClasesAula() {
-		return clasesAula;
-	}
-
-	public void setClasesAula(List<Clase> clases) {
-		this.clasesAula = clases;
 	}
 
 	public String getNivel() {

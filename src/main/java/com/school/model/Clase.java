@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -28,7 +29,8 @@ public class Clase implements Serializable{
 	private String nombre;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnoreProperties({"clasesAula", "hibernateLazyInitializer", "handler"})
+	@NotNull(message = "no puede estar vacío.")
+	@JoinColumn(name = "aula_id")
 	private Aula aula;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -38,7 +40,6 @@ public class Clase implements Serializable{
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = " empleado_id", nullable = true)
-	@JsonIgnoreProperties({"listaClases", "hibernateLazyInitializer", "handler"})
 	private Empleado empleado;
 	
 	public Clase() {
