@@ -17,7 +17,6 @@ public class EmpleadoServiceImpl implements EmpleadoService{
     @Autowired
     private EmpleadoDao empleadoDao;
 
-
     @Override
     public Empleado save(Empleado empleado) {
         return empleadoDao.save(empleado);
@@ -49,5 +48,10 @@ public class EmpleadoServiceImpl implements EmpleadoService{
     @Override
     public List<Clase> findClasesProfesor(Long id) {
         return empleadoDao.findClasesProfesor(id);
+    }
+
+    @Override
+    public Empleado findByDni(String dni) {
+        return empleadoDao.findByDni(dni);
     }
 }

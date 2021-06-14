@@ -23,4 +23,6 @@ public interface EmpleadoService {
     public boolean delete(Long id);
 
     public List<Clase> findClasesProfesor(Long id);
+
+    public Empleado findByDni(String dni);
 }

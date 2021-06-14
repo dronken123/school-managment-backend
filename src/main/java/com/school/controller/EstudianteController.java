@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +26,14 @@ public class EstudianteController {
 
 	@Autowired
 	private EstudianteService estudianteService;
-	
+
+
+//	@PreAuthorize("hasAnyRole('ADMIN', 'PROFESOR')")
 	@GetMapping
 	public ResponseEntity<List<Estudiante>> getAllEstudiantes(){
 		return new ResponseEntity<>(estudianteService.findAll(), HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/crear")
 	public ResponseEntity<?> saveEstudiante(@Valid @RequestBody Estudiante estudiante, BindingResult results){
 		Estudiante estudianteNuevo = null;
@@ -62,7 +65,8 @@ public class EstudianteController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 		
 	}
-	
+
+//	@PreAuthorize("hasAnyRole('ADMIN','PROFESOR')")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getEstudiante(@PathVariable Long id){
 		
@@ -88,6 +92,7 @@ public class EstudianteController {
 		
 	}
 
+//	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/buscarDni")
 	public ResponseEntity<?> getEstudianteByDni(@RequestParam String dni){
 
@@ -112,7 +117,9 @@ public class EstudianteController {
 		return new ResponseEntity<Estudiante>(estudiante, HttpStatus.OK);
 
 	}
-	
+
+
+//	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateEstudiante(@Valid @RequestBody Estudiante estudiante ,BindingResult results , @PathVariable Long id){
 		Estudiante estudianteActual = estudianteService.getEstudianteById(id).get();
@@ -161,8 +168,8 @@ public class EstudianteController {
 		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-	
-	
+
+//	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteEstudiante(@PathVariable Long id){
 		

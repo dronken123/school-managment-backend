@@ -1,25 +1,14 @@
 package com.school.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.school.security.models.Usuario;
 
 @Entity
 @Table(name = "estudiantes")
@@ -65,17 +54,26 @@ public class Estudiante implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = true)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Aula aulaEstudiante;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "apoderado_id", nullable = false)
 	@NotNull(message = "no puede estar vacío")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Apoderado apoderado;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@NotNull(message = "no puede estar vacío")
 	@JoinColumn(name = "grado_id", nullable = false)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Grado grado;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@NotNull(message = "no puede estar vacío")
+	@JoinColumn(name = "usuario_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	private Usuario usuario;
 
 	public Estudiante() {
 		// TODO Auto-generated constructor stub
@@ -183,6 +181,14 @@ public class Estudiante implements Serializable {
 
 	public void setGrado(Grado grado) {
 		this.grado = grado;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	private static final long serialVersionUID = 1L;

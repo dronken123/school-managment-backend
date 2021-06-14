@@ -26,10 +26,14 @@ public class EmpleadoController {
     @Autowired
     private EmpleadoService empleadoService;
 
-
     @GetMapping
     public ResponseEntity<List<Empleado>> getAllEmpleados(){
         return new ResponseEntity<>(empleadoService.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/clases")
+    public ResponseEntity<List<Clase>> getClasesEmpleado(@RequestParam("id") String id){
+        return new ResponseEntity<List<Clase>>(empleadoService.findClasesProfesor(Long.parseLong(id)), HttpStatus.OK);
     }
 
     @PostMapping("/crear")
@@ -86,6 +90,31 @@ public class EmpleadoController {
         }
 
         return new ResponseEntity<Empleado>(empleado.get(), HttpStatus.OK);
+
+    }
+
+    @GetMapping("/buscarDni")
+    public ResponseEntity<?> getEmpleadoByDni(@RequestParam String dni){
+
+        Empleado empleado = null;
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            empleado = empleadoService.findByDni(dni);
+        } catch (DataAccessException e) {
+            response.put("mensaje", "Error al consultar el empleado en la base de datos");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if(empleado == null) {
+            response.put("mensaje", "El Empleado con el DNI: ".concat(dni.concat(" no existe en la base de datos")));
+
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<Empleado>(empleado, HttpStatus.OK);
 
     }
 
