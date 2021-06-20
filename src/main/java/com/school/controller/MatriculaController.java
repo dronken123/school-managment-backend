@@ -7,20 +7,14 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import com.school.model.Apoderado;
-import com.school.model.Estudiante;
+import com.school.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.school.model.Matricula;
 import com.school.service.MatriculaService;
 
 @CrossOrigin(origins = {"http://localhost:4200"})
@@ -67,5 +61,19 @@ public class MatriculaController {
 		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-	
+
+	@GetMapping("/niveles")
+	public ResponseEntity<List<Nivel>> getNiveles(){
+		return new ResponseEntity<>(matriculaService.getNiveles(), HttpStatus.OK);
+	}
+
+	@GetMapping("/turnos")
+	public ResponseEntity<List<Turno>> getTurnos(){
+		return new ResponseEntity<>(matriculaService.getTurnos(), HttpStatus.OK);
+	}
+
+	@GetMapping("/dias")
+	public ResponseEntity<List<DiaSemana>> getDias(){
+		return new ResponseEntity<>(matriculaService.getDias(), HttpStatus.OK);
+	}
 }

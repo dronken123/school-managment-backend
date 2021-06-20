@@ -58,8 +58,9 @@ public class Estudiante implements Serializable {
 	private Aula aulaEstudiante;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "apoderado_id", nullable = false)
-	@NotNull(message = "no puede estar vacío")
+//	@JoinColumn(name = "apoderado_id", nullable = false)
+//	@NotNull(message = "no puede estar vacío")
+	@JoinColumn(name = "apoderado_id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Apoderado apoderado;
 
@@ -70,10 +71,20 @@ public class Estudiante implements Serializable {
 	private Grado grado;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@NotNull(message = "no puede estar vacío")
+//	@NotNull(message = "no puede estar vacío")
 	@JoinColumn(name = "usuario_id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Usuario usuario;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "turno_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	private Turno turno;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "nivel_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	private Nivel nivel;
 
 	public Estudiante() {
 		// TODO Auto-generated constructor stub
@@ -189,6 +200,26 @@ public class Estudiante implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public Turno getTurno() {
+		return turno;
+	}
+
+	public void setTurno(Turno turno) {
+		this.turno = turno;
+	}
+
+	public Nivel getNivel() {
+		return nivel;
+	}
+
+	public void setNivel(Nivel nivel) {
+		this.nivel = nivel;
+	}
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
 	}
 
 	private static final long serialVersionUID = 1L;

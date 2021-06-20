@@ -122,9 +122,11 @@ public class ClaseController {
 		}
 		
 		try {
-			claseActual.setNombre(clase.getNombre());
 			claseActual.setAula(clase.getAula());
-			
+			claseActual.setEmpleado(clase.getEmpleado());
+			claseActual.setCurso(clase.getCurso());
+			claseActual.setFrecuencias(clase.getFrecuencias());
+			claseActual.setMateriales(clase.getMateriales());
 			claseActualizada = claseService.update(claseActual);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al insertar la clase en la base de datos");

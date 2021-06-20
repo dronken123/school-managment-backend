@@ -3,14 +3,12 @@ package com.school.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.school.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.school.dao.MatriculaDao;
-import com.school.model.Apoderado;
-import com.school.model.Estudiante;
-import com.school.model.Matricula;
 
 @Service
 public class MatriculaServiceImpl implements MatriculaService{
@@ -47,7 +45,21 @@ public class MatriculaServiceImpl implements MatriculaService{
 			return true;
 		}).orElse(false);
 	}
-	
+
+	@Override
+	public List<Nivel> getNiveles() {
+		return matriculaDao.getNiveles();
+	}
+
+	@Override
+	public List<Turno> getTurnos() {
+		return matriculaDao.getTurnos();
+	}
+
+	@Override
+	public List<DiaSemana> getDias() {
+		return matriculaDao.getDias();
+	}
 
 
 }

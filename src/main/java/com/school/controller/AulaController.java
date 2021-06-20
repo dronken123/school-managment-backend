@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import com.school.model.Aula;
 import com.school.service.AulaService;
 
-@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin(origins = {"*"})
 @RestController
 @RequestMapping("/api/aulas")
 public class AulaController {

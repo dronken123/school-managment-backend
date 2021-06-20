@@ -3,7 +3,10 @@ package com.school.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.school.model.DiaSemana;
 import com.school.model.Matricula;
+import com.school.model.Nivel;
+import com.school.model.Turno;
 
 public interface MatriculaService {
 	
@@ -14,4 +17,10 @@ public interface MatriculaService {
 	public List<Matricula> findAll();
 	
 	public boolean delete(Long id);
+
+	public List<Nivel> getNiveles();
+
+	public List<Turno> getTurnos();
+
+	public List<DiaSemana> getDias();
 }

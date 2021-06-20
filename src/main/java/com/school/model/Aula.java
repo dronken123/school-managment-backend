@@ -36,12 +36,6 @@ public class Aula implements Serializable {
 	@Size(min = 1, max = 10, message = "tiene que ser entre 2 y 10 caracteres.")
 	private String seccion;
 
-	@NotEmpty(message = "no puede estar vacío.")
-	private String nivel;
-
-	@NotEmpty(message = "no puede estar vacío.")
-	private String turno;
-
 	@NotNull(message = "no puede estar vacío")
 	private Integer capacidad;
 
@@ -50,6 +44,16 @@ public class Aula implements Serializable {
 	@JsonIgnoreProperties({ "aulas", "hibernateLazyInitializer", "handler" })
 	@JoinColumn(name = "grado_id")
 	private Grado gradoAula;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "turno_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	private Turno turno;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "nivel_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	private Nivel nivel;
 
 	public Aula() {
 		// TODO Auto-generated constructor stub
@@ -79,13 +83,6 @@ public class Aula implements Serializable {
 		this.seccion = seccion;
 	}
 
-	public String getNivel() {
-		return nivel;
-	}
-
-	public void setNivel(String nivel) {
-		this.nivel = nivel;
-	}
 
 	public Grado getGradoAula() {
 		return gradoAula;
@@ -95,13 +92,6 @@ public class Aula implements Serializable {
 		this.gradoAula = gradoAula;
 	}
 
-	public String getTurno() {
-		return turno;
-	}
-
-	public void setTurno(String turno) {
-		this.turno = turno;
-	}
 
 	public Integer getCapacidad() {
 		return capacidad;
@@ -109,6 +99,22 @@ public class Aula implements Serializable {
 
 	public void setCapacidad(Integer capacidad) {
 		this.capacidad = capacidad;
+	}
+
+	public Turno getTurno() {
+		return turno;
+	}
+
+	public void setTurno(Turno turno) {
+		this.turno = turno;
+	}
+
+	public Nivel getNivel() {
+		return nivel;
+	}
+
+	public void setNivel(Nivel nivel) {
+		this.nivel = nivel;
 	}
 
 	/**

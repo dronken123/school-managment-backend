@@ -5,6 +5,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "empleados")
@@ -48,9 +50,9 @@ public class Empleado implements Serializable {
 
     private String correo;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "empleado")
-//    @JsonIgnoreProperties({"empleado" ,"hibernateLazyInitializer", "handler"})
-//    private List<Clase> listaClases = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "profesor_especialidad", joinColumns = @JoinColumn(name = "empleado_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "especialidad_id", referencedColumnName = "id"))
+    private Set<Especialidad> especialidades = new HashSet<>();
 
     public Empleado() {
     }
@@ -135,13 +137,15 @@ public class Empleado implements Serializable {
         this.correo = correo;
     }
 
-//    public List<Clase> getListaClases() {
-//        return listaClases;
-//    }
-//
-//    public void setListaClases(List<Clase> listaClases) {
-//        this.listaClases = listaClases;
-//    }
+    public Set<Especialidad> getEspecialidades() {
+        return especialidades;
+    }
+
+    public void setEspecialidades(Set<Especialidad> especialidades) {
+        this.especialidades = especialidades;
+    }
+
+
 
     /**
      *

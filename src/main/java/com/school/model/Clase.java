@@ -1,15 +1,10 @@
 package com.school.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,24 +18,30 @@ public class Clase implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@NotEmpty(message = "no puede estar vacío.")
-	@Size(min = 2, max = 20, message = "tiene que ser entre 2 y 20 caracteres.")
-	private String nombre;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@NotNull(message = "no puede estar vacío.")
 	@JoinColumn(name = "aula_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Aula aula;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_curso", nullable = false)
+	@JoinColumn(name = "curso_id", nullable = false)
 	@JsonIgnoreProperties({"clases", "hibernateLazyInitializer", "handler"})
 	private Curso curso;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = " empleado_id", nullable = true)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Empleado empleado;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "clase_id")
+	private List<Material> materiales = new ArrayList<>();
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "clase_id")
+	private List<Frecuencia> frecuencias = new ArrayList<>();
 	
 	public Clase() {
 		// TODO Auto-generated constructor stub
@@ -52,14 +53,6 @@ public class Clase implements Serializable{
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
 	}
 
 	public Aula getAula() {
@@ -84,6 +77,22 @@ public class Clase implements Serializable{
 
 	public void setEmpleado(Empleado empleado) {
 		this.empleado = empleado;
+	}
+
+	public List<Material> getMateriales() {
+		return materiales;
+	}
+
+	public void setMateriales(List<Material> materiales) {
+		this.materiales = materiales;
+	}
+
+	public List<Frecuencia> getFrecuencias() {
+		return frecuencias;
+	}
+
+	public void setFrecuencias(List<Frecuencia> frecuencias) {
+		this.frecuencias = frecuencias;
 	}
 
 	/**
