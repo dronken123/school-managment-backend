@@ -26,6 +26,7 @@ public class ClaseServiceImpl implements ClaseService{
 	public Clase save(Clase clase) {
 		// TODO Auto-generated method stub
 		clase.setAula(aulaDao.findById(clase.getAula().getId()).get());
+		clase.getFrecuencias().stream().forEach(f -> f.setClase(clase));
 		return claseDao.save(clase);
 	}
 	

@@ -1,5 +1,8 @@
 package com.school.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.school.security.models.Usuario;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -49,6 +52,11 @@ public class Empleado implements Serializable {
     private String sexo;
 
     private String correo;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "profesor_especialidad", joinColumns = @JoinColumn(name = "empleado_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "especialidad_id", referencedColumnName = "id"))
@@ -145,7 +153,13 @@ public class Empleado implements Serializable {
         this.especialidades = especialidades;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
 
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
     /**
      *

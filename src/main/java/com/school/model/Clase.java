@@ -39,8 +39,7 @@ public class Clase implements Serializable{
 	@JoinColumn(name = "clase_id")
 	private List<Material> materiales = new ArrayList<>();
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "clase_id")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "clase")
 	private List<Frecuencia> frecuencias = new ArrayList<>();
 	
 	public Clase() {

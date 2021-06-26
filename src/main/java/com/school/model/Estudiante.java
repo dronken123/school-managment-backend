@@ -1,6 +1,8 @@
 package com.school.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -85,6 +87,14 @@ public class Estudiante implements Serializable {
 	@JoinColumn(name = "nivel_id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Nivel nivel;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "estudiante_id")
+	private List<Asistencia> asistencias = new ArrayList<>();
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinColumn(name = "estudiante_id")
+	private List<Nota> notas = new ArrayList<>();
 
 	public Estudiante() {
 		// TODO Auto-generated constructor stub
@@ -218,8 +228,24 @@ public class Estudiante implements Serializable {
 		this.nivel = nivel;
 	}
 
+	public List<Asistencia> getAsistencias() {
+		return asistencias;
+	}
+
+	public void setAsistencias(List<Asistencia> asistencias) {
+		this.asistencias = asistencias;
+	}
+
 	public static long getSerialVersionUID() {
 		return serialVersionUID;
+	}
+
+	public List<Nota> getNotas() {
+		return notas;
+	}
+
+	public void setNotas(List<Nota> notas) {
+		this.notas = notas;
 	}
 
 	private static final long serialVersionUID = 1L;

@@ -3,6 +3,7 @@ package com.school.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.school.model.Nota;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -22,4 +23,6 @@ public interface EstudianteService {
 	public Page<Estudiante> findAll(Pageable pageable);
 	
 	public boolean delete(Long id);
+
+	public List<Nota> findNotasEstudiante(Long id);
 }

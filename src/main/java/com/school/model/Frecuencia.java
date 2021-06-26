@@ -18,6 +18,11 @@ public class Frecuencia implements Serializable {
     private String horario_fin;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "clase_id")
+    @JsonIgnoreProperties({"frecuencias", "hibernateLazyInitializer", "handler"})
+    private Clase clase;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "dia_id")
     private DiaSemana dia;
@@ -52,5 +57,13 @@ public class Frecuencia implements Serializable {
 
     public void setDia(DiaSemana dia) {
         this.dia = dia;
+    }
+
+    public Clase getClase() {
+        return clase;
+    }
+
+    public void setClase(Clase clase) {
+        this.clase = clase;
     }
 }

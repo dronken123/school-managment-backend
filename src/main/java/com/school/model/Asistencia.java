@@ -21,15 +21,10 @@ public class Asistencia implements Serializable {
 
     private String estado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "estudiante_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Estudiante estudiante;
-
     public Asistencia() {
-        Date date = Calendar.getInstance().getTime();
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        this.fecha = formatter.format(date);
+//        Date date = Calendar.getInstance().getTime();
+//        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+//        this.fecha = formatter.format(date);
     }
 
     public Long getId() {
@@ -54,13 +49,5 @@ public class Asistencia implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
-    }
-
-    public Estudiante getEstudiante() {
-        return estudiante;
-    }
-
-    public void setEstudiante(Estudiante estudiante) {
-        this.estudiante = estudiante;
     }
 }

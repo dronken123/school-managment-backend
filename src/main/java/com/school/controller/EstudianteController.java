@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.school.model.Nota;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,7 @@ public class EstudianteController {
 	private EstudianteService estudianteService;
 
 
+
 //	@PreAuthorize("hasAnyRole('ADMIN', 'PROFESOR')")
 	@GetMapping
 	public ResponseEntity<List<Estudiante>> getAllEstudiantes(){
@@ -43,6 +45,11 @@ public class EstudianteController {
 		Pageable pageable = PageRequest.of(page, 8);
 
 		return new ResponseEntity<>(estudianteService.findAll(pageable), HttpStatus.OK);
+	}
+
+	@GetMapping("/notasEstudiante")
+	public ResponseEntity<List<Nota>> getNotasEstudiante(@RequestParam("id") Long id){
+		return new ResponseEntity<>(estudianteService.findNotasEstudiante(id), HttpStatus.OK);
 	}
 
 	@PostMapping("/crear")
@@ -165,6 +172,8 @@ public class EstudianteController {
 			estudianteActual.setDomicilio(estudiante.getDomicilio());
 			estudianteActual.setApoderado(estudiante.getApoderado());
 			estudianteActual.setGrado(estudiante.getGrado());
+			estudianteActual.setAsistencias(estudiante.getAsistencias());
+//			estudianteActual.setUsuario(estudiante.getUsuario());
 			
 			estudianteActualizado = estudianteService.save(estudianteActual);
 		} catch (DataAccessException e) {
