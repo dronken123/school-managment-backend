@@ -1,5 +1,6 @@
 package com.school.dao;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.school.model.Clase;

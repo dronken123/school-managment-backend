@@ -3,6 +3,7 @@ package com.school.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.school.dao.MaterialDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,6 @@ public class ClaseServiceImpl implements ClaseService{
 	@Autowired
 	private AulaDao aulaDao;
 
-	
 	@Override
 	@Transactional
 	public Clase save(Clase clase) {
@@ -61,6 +61,4 @@ public class ClaseServiceImpl implements ClaseService{
 			return true;
 		}).orElse(false);
 	}
-
-
 }

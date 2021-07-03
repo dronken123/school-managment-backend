@@ -1,30 +1,31 @@
 package com.school.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.school.dao.MaterialDao;
+import com.school.model.Material;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.school.model.Clase;
 import com.school.service.ClaseService;
+import org.springframework.web.multipart.MultipartFile;
 
 @CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
@@ -33,6 +34,9 @@ public class ClaseController {
 
 	@Autowired
 	private ClaseService claseService;
+
+	@Autowired
+	private MaterialDao materialDao;
 	
 	@GetMapping
 	public ResponseEntity<List<Clase>> getAllClases(){
@@ -154,7 +158,19 @@ public class ClaseController {
 		}
 		
 		try {
+			clase.getMateriales().forEach( c -> {
+				String archivoPDFparaBorrar = c.getArchivo();
+
+				if(archivoPDFparaBorrar != null && archivoPDFparaBorrar.length() > 0){
+					Path rutaArchivoPDF = Paths.get("uploads").resolve(archivoPDFparaBorrar).toAbsolutePath();
+					File archivoPDFparaborrar = rutaArchivoPDF.toFile();
+					if(archivoPDFparaborrar.exists() && archivoPDFparaborrar.canRead()){
+						archivoPDFparaborrar.delete();
+					}
+				}
+			});
 			claseService.delete(id);
+
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al eliminar la clase en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -167,11 +183,116 @@ public class ClaseController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
+	@PostMapping("/uploads")
+	public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam("idClase") String idAula, @RequestParam("nombreFile") String nombreFile){
+		Map<String, Object> response = new HashMap<>();
+
+		Clase clase = claseService.getClaseById(Long.parseLong(idAula)).orElse(null);
+
+		if(!archivo.isEmpty()){
+			String nombreArchivoPDF = UUID.randomUUID().toString() + "_" + archivo.getOriginalFilename().replace(" ","");
+			Path rutaArchivo = Paths.get("uploads").resolve(nombreArchivoPDF).toAbsolutePath();
+
+			try {
+				Files.copy(archivo.getInputStream(), rutaArchivo);
+			} catch (IOException e) {
+				response.put("mensaje", "Error al subir el archivo "+nombreArchivoPDF);
+				response.put("error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+
+			Material material = new Material();
+			material.setNombre(nombreFile);
+			material.setArchivo(nombreArchivoPDF);
+			clase.getMateriales().add(material);
+
+			claseService.update(clase);
+
+			response.put("clase", clase);
+			response.put("mensaje", "Has subido correctamente el archivo " + nombreArchivoPDF);
+
+		}
+
+
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	}
+
+	@DeleteMapping("/eliminarMaterial")
+	public ResponseEntity<?> deleteArchivo(@RequestParam("idClase") String idClase, @RequestParam("idMaterial") String idMaterial){
+
+		Map<String, Object> response = new HashMap<>();
+		Clase clase = claseService.getClaseById(Long.parseLong(idClase)).orElse(null);
+
+		if(clase == null){
+			response.put("mensaje", "La clase con el id "+idClase+" no existe en la base de datos");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+
+		Material materialEncontrado = clase.getMateriales().stream().filter(material -> Long.parseLong(idMaterial) == material.getId())
+							 .findAny()
+							 .orElse(null);
+
+		if(materialEncontrado == null){
+			response.put("mensaje", "El material con el id "+idMaterial+" no existe en la base de datos");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+
+		String archivoPDFparaBorrar = materialEncontrado.getArchivo();
+
+		if(archivoPDFparaBorrar == null || archivoPDFparaBorrar.length() == 0 || archivoPDFparaBorrar.length() < 0){
+			response.put("mensaje", "Hubo un error al eliminar el material "+archivoPDFparaBorrar);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		Path rutaArchivoPDF = Paths.get("uploads").resolve(archivoPDFparaBorrar).toAbsolutePath();
+		File archivoPDFparaborrar = rutaArchivoPDF.toFile();
+		if(!archivoPDFparaborrar.exists() || !archivoPDFparaborrar.canRead()){
+			response.put("mensaje", "Error al eliminar "+archivoPDFparaBorrar+", el archivo no existe o no se puede leer");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		try{
+
+			clase.getMateriales().remove(materialEncontrado);
+
+			claseService.update(clase);
+			materialDao.deleteById(materialEncontrado.getId());
+			archivoPDFparaborrar.delete();
+		}catch (DataAccessException e){
+			response.put("mensaje", "Error al eliminar el archivo en la base de datos");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+
+
+		response.put("mensaje", "El archivo se eliminó con éxito.");
+
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
 	
-	
-	
-	
-	
+	@GetMapping("/uploads/pdf/{nombrePDF:.+}")
+	public ResponseEntity<Resource> verArchivoPDF(@PathVariable String nombrePDF){
+
+		Path rutaArchivoPDF = Paths.get("uploads").resolve(nombrePDF).toAbsolutePath();
+		Resource recurso = null;
+
+		try {
+			recurso = new UrlResource(rutaArchivoPDF.toUri());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+
+		if(!recurso.exists() && !recurso.isReadable()){
+			throw new RuntimeException("Error no se pudo cargar el PDF "+nombrePDF);
+		}
+
+		HttpHeaders cabecera = new HttpHeaders();
+		cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"");
+
+		return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
+	}
 	
 	
 	
