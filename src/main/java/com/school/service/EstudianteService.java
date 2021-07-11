@@ -14,7 +14,9 @@ public interface EstudianteService {
 
 	public Estudiante save(Estudiante estudiante);
 
-	public Estudiante findByDni(String dni);
+	public List<Estudiante> saveAll(List<Estudiante> estudiantes);
+
+	public Estudiante loginUsuario(String username, String password);
 	
 	public Optional<Estudiante> getEstudianteById(Long id);
 
@@ -25,4 +27,6 @@ public interface EstudianteService {
 	public boolean delete(Long id);
 
 	public List<Nota> findNotasEstudiante(Long id);
+
+	public Estudiante findByDniAndDni(String username, String password);
 }

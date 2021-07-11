@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.school.dao.NotaDao;
 import com.school.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -24,6 +25,9 @@ public class MatriculaController {
 
 	@Autowired
 	private MatriculaService matriculaService;
+
+	@Autowired
+	private NotaDao notaDao;
 	
 	@PostMapping("/crear")
 	public ResponseEntity<?> saveMatricula(@Valid @RequestBody Matricula matricula, BindingResult results){
@@ -76,4 +80,31 @@ public class MatriculaController {
 	public ResponseEntity<List<DiaSemana>> getDias(){
 		return new ResponseEntity<>(matriculaService.getDias(), HttpStatus.OK);
 	}
+
+	@GetMapping("/notas")
+	public ResponseEntity<List<Nota>> getNotas(@RequestParam("idCurso") String idCurso, @RequestParam("idAula") String idAula){
+		return new ResponseEntity<>(notaDao.notasPorAulaYCurso(Long.parseLong(idCurso), Long.parseLong(idAula)), HttpStatus.OK);
+	}
+
+	@PutMapping("/notas")
+	public ResponseEntity<?> UpdateNota(@RequestBody List<Nota> notas){
+		List<Nota> notasActualizar = notas;
+		Map<String, Object> response = new HashMap<>();
+
+
+		try {
+			notasActualizar = (List<Nota>) notaDao.saveAll(notas);
+		} catch (DataAccessException e) {
+			response.put("mensaje", "Error al ACTUALIZAR las notas en la base de datos");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		response.put("mensaje", "Notas actualizadas con éxito!");
+		response.put("notas", notasActualizar);
+
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	}
+
 }

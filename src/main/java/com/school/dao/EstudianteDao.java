@@ -10,7 +10,10 @@ import java.util.List;
 
 public interface EstudianteDao extends JpaRepository<Estudiante, Long>{
 
-    public Estudiante findByDni(String dni);
+    @Query("FROM Estudiante e where e.usuario.username = ?1 and e.usuario.password = ?2 ")
+    public Estudiante loginUsuario(String username, String password);
+
+    public Estudiante findByDniAndDni(String username, String password);
 
     @Query(value = "Select * FROM notas n WHERE estudiante.id = ?1", nativeQuery = true)
     public List<Nota> findNotasEstudiante(Long id);

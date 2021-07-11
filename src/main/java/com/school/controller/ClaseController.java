@@ -13,6 +13,7 @@ import javax.validation.Valid;
 
 import com.school.dao.MaterialDao;
 import com.school.model.Material;
+import com.school.model.Nota;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -42,7 +43,13 @@ public class ClaseController {
 	public ResponseEntity<List<Clase>> getAllClases(){
 		return new ResponseEntity<List<Clase>>(claseService.findAll(), HttpStatus.OK);
 	}
-	
+
+	@PostMapping("/crearNota")
+	public ResponseEntity<Nota> crearNota(@RequestBody Nota nota){
+		return new ResponseEntity<Nota>(nota, HttpStatus.CREATED);
+	}
+
+
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getClase(@PathVariable Long id){
 		

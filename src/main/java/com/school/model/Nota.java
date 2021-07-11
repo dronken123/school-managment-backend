@@ -24,6 +24,11 @@ public class Nota implements Serializable {
     @JoinColumn(name = "curso_id")
     private Curso curso;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"notas", "hibernateLazyInitializer", "handler"})
+    @JoinColumn(name = "estudiante_id")
+    private Estudiante estudiante;
+
     public Long getId() {
         return id;
     }
@@ -79,5 +84,13 @@ public class Nota implements Serializable {
 
     public void setCurso(Curso curso) {
         this.curso = curso;
+    }
+
+    public Estudiante getEstudiante() {
+        return estudiante;
+    }
+
+    public void setEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
     }
 }

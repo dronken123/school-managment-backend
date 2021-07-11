@@ -84,6 +84,28 @@ public class EstudianteController {
 		
 	}
 
+	@PutMapping("/actualizarEstudiantes")
+	public ResponseEntity<?> saveAllEstudiante(@RequestBody List<Estudiante> estudiantes){
+		List<Estudiante> estudiantesActualizar = estudiantes;
+		Map<String, Object> response = new HashMap<>();
+
+
+		try {
+			estudiantesActualizar = estudianteService.saveAll(estudiantes);
+		} catch (DataAccessException e) {
+			response.put("mensaje", "Error al insertar el estudiante en la base de datos");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		response.put("mensaje", "El estudiante ha sido creado con éxito!");
+		response.put("estudiantes", estudiantesActualizar);
+
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+
+	}
+
 //	@PreAuthorize("hasAnyRole('ADMIN','PROFESOR')")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getEstudiante(@PathVariable Long id){
@@ -112,13 +134,13 @@ public class EstudianteController {
 
 //	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/buscarDni")
-	public ResponseEntity<?> getEstudianteByDni(@RequestParam String dni){
+	public ResponseEntity<?> getEstudianteByDni(@RequestParam String username, @RequestParam String password){
 
 		Estudiante estudiante = null;
 		Map<String, Object> response = new HashMap<>();
 
 		try {
-			estudiante = estudianteService.findByDni(dni);
+			estudiante = estudianteService.findByDniAndDni(username, password);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al consultar el estudiante en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -127,11 +149,12 @@ public class EstudianteController {
 		}
 
 		if(estudiante == null) {
-			response.put("mensaje", "El estudiante con el DNI: ".concat(dni.toString().concat(" no existe en la base de datos")));
+			response.put("mensaje", "El estudiante con el DNI: ".concat(username.toString().concat(" no existe en la base de datos")));
 
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
+		System.out.println(estudiante.getNombres());
 		return new ResponseEntity<Estudiante>(estudiante, HttpStatus.OK);
 
 	}
@@ -173,6 +196,9 @@ public class EstudianteController {
 			estudianteActual.setApoderado(estudiante.getApoderado());
 			estudianteActual.setGrado(estudiante.getGrado());
 			estudianteActual.setAsistencias(estudiante.getAsistencias());
+			estudianteActual.setNivel(estudiante.getNivel());
+			estudianteActual.setTurno(estudiante.getTurno());
+			estudianteActual.setNotas(estudiante.getNotas());
 //			estudianteActual.setUsuario(estudiante.getUsuario());
 			
 			estudianteActualizado = estudianteService.save(estudianteActual);

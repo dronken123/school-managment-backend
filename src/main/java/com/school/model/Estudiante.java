@@ -43,6 +43,7 @@ public class Estudiante implements Serializable {
 	private String dni;
 
 	@NotEmpty(message = "no puede estar vacío")
+	@Size(min = 10, max = 80, message = " tiene que ser entre 10 y 80 caracteres.")
 	private String domicilio;
 
 	@Size(min = 9, max = 9, message = " tiene que tener 8 caracteres.")
@@ -92,8 +93,7 @@ public class Estudiante implements Serializable {
 	@JoinColumn(name = "estudiante_id")
 	private List<Asistencia> asistencias = new ArrayList<>();
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn(name = "estudiante_id")
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "estudiante")
 	private List<Nota> notas = new ArrayList<>();
 
 	public Estudiante() {

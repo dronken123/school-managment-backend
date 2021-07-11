@@ -26,8 +26,14 @@ public class EstudianteServiceImpl implements EstudianteService{
 	}
 
 	@Override
-	public Estudiante findByDni(String dni) {
-		return estudianteDao.findByDni(dni);
+	@Transactional(readOnly = false)
+	public List<Estudiante> saveAll(List<Estudiante> estudiantes) {
+		return estudianteDao.saveAll(estudiantes);
+	}
+
+	@Override
+	public Estudiante loginUsuario(String username, String password) {
+		return estudianteDao.loginUsuario(username, password);
 	}
 
 	@Override
@@ -60,6 +66,11 @@ public class EstudianteServiceImpl implements EstudianteService{
 	@Override
 	public List<Nota> findNotasEstudiante(Long id) {
 		return estudianteDao.findNotasEstudiante(id);
+	}
+
+	@Override
+	public Estudiante findByDniAndDni(String username, String password) {
+		return estudianteDao.findByDniAndDni(username,password);
 	}
 
 

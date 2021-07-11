@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.school.model.Clase;
+import com.school.model.Nota;
 
 public interface ClaseService {
 
@@ -16,5 +17,8 @@ public interface ClaseService {
 	public List<Clase> findAll();
 	
 	public boolean delete(Long id);
+
+	public Nota saveNota(Nota nota);
+
 	
 }

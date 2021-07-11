@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.school.dao.MaterialDao;
+import com.school.dao.NotaDao;
+import com.school.model.Nota;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,9 @@ public class ClaseServiceImpl implements ClaseService{
 	
 	@Autowired
 	private AulaDao aulaDao;
+
+	@Autowired
+	private NotaDao notaDao;
 
 	@Override
 	@Transactional
@@ -61,4 +66,10 @@ public class ClaseServiceImpl implements ClaseService{
 			return true;
 		}).orElse(false);
 	}
+
+	@Override
+	public Nota saveNota(Nota nota) {
+		return notaDao.save(nota);
+	}
+
 }
